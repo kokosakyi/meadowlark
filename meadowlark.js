@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const fortune = require('./lib/fortune');
+
 // set up handlebars view engine
 const handlebars = require('express3-handlebars').create({defaultLayout: 'main'});
 app.engine('handlebars', handlebars.engine);
@@ -12,22 +14,13 @@ app.set('port', process.env.PORT || 3000);
 // Static files
 app.use(express.static(__dirname + '/public'));
 
-
-const fortunes = [
-    "Conquer your fears or they will conquer you.",
-    "Rivers need springs.",
-    "Do not fear what you don't know.",
-    "You will have a pleasant surprise.",
-    "Whenever possible, keep it simple.",
-    ];
-
 // Routes
 app.get('/', (req, res)=>{
     res.render('home');
 });
 
 app.get('/about', (req, res)=>{
-    const randomFortune = fortunes[Math.floor(Math.random()*fortunes.length)];
+    const randomFortune = fortune.getFortune();
     res.render('about', {fortune: randomFortune});
 });
 
